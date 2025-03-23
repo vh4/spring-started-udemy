@@ -52,7 +52,7 @@
                 <h5 class="modal-title">Add Employee</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form th:action="@{/save}" method="post">
+            <form th:action="@{/home/save}" method="post">
                 <div class="modal-body">
                     <input type="text" name="firstName" class="form-control mb-2" placeholder="First Name" required>
                     <input type="text" name="lastName" class="form-control mb-2" placeholder="Last Name" required>
@@ -106,13 +106,13 @@
                 $("#edit-email").val(data.email);
                 $("#edit-phone").val(data.phone);
                 $("#edit-city").val(data.city);
-                $("#editEmployeeForm").attr("action", "/update/" + data.id);
+                $("#editEmployeeForm").attr("action", "/home/update/" + data.id);
             });
         });
 
         $(".btn-delete").click(function () {
             let id = $(this).data("id");
-            $.post("/delete/" + id, function () {
+            $.post("/home/delete/" + id, function () {
                 location.reload();
             });
         });
