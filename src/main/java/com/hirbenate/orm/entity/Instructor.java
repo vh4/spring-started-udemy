@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -101,4 +102,16 @@ public class Instructor {
                 ", lastName='" + lastName + '\'' +
                 '}';
     }
+
+    public void add(Course tempCourse) {
+
+        if (courses == null) {
+            courses = new ArrayList<>();
+        }
+
+        courses.add(tempCourse);
+
+        tempCourse.setInstructor(this);
+    }
+
 }

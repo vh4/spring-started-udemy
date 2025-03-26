@@ -20,4 +20,20 @@ public interface Dao {
 
     List<Course> findCoursesByInstructorId(int theId);
 
+    //you can use join for get relation.
+    Instructor findInstructorByIdJoinFetch(int theId);
+
+    Course findCourseById(int theId);
+
+    void update(Instructor tempInstructor);
+
+    void update(Course tempCourse);
+
+    void deleteCourseById(int theId);
+
+    void save(Course course);
+
+    Course findCourseAndReviewsByCourseId(int theId);
+
+
 }

@@ -4,6 +4,7 @@ import com.hirbenate.orm.entity.Course;
 import com.hirbenate.orm.entity.Instructor;
 import com.hirbenate.orm.entity.InstructorDetail;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 @Repository
 public class DaoImp  implements Dao{
 
-    private EntityManager db;
+    private final EntityManager db;
 
     @Autowired
     public DaoImp(EntityManager entityManager){
@@ -67,8 +68,70 @@ public class DaoImp  implements Dao{
         query.setParameter("data", id);
 
         // execute query
-        List<Course> courses = query.getResultList();
-        return courses;
+        return query.getResultList();
+    }
+
+    @Override
+    public Instructor findInstructorByIdJoinFetch(int theId) {
+        try {
+            TypedQuery<Instructor> query = db.createQuery(
+                    "select i from Instructor i "
+                            + "JOIN FETCH i.courses "
+                            + "JOIN FETCH i.instructorDetail "
+                            + "where i.id = :data", Instructor.class);
+            query.setParameter("data", theId);
+
+            // Execute query
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Course findCourseById(int theId) {
+        return db.find(Course.class, theId);
+    }
+
+
+    @Override
+    @Transactional
+    public void update(Instructor tempInstructor) {
+        db.merge(tempInstructor);
+    }
+
+    @Override
+    @Transactional
+    public void update(Course tempCourse) {
+        db.merge(tempCourse);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourseById(int id){
+        Course course = db.find(Course.class, id);
+        db.remove(course);
+
+    }
+
+    @Override
+    @Transactional
+    public void save(Course theCourse) {
+        db.persist(theCourse);
+    }
+
+    @Override
+    public Course findCourseAndReviewsByCourseId(int id){
+        // create query
+        TypedQuery<Course> query = db.createQuery(
+                "select c from Course c "
+                        + "JOIN FETCH c.reviews "
+                        + "where c.id = :data", Course.class);
+
+        query.setParameter("data", id);
+
+        // execute query
+        return query.getSingleResult();
     }
 
 }
