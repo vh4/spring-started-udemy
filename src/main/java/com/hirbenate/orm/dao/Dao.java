@@ -1,7 +1,10 @@
 package com.hirbenate.orm.dao;
 
+import com.hirbenate.orm.entity.Course;
 import com.hirbenate.orm.entity.InstructorDetail;
 import com.hirbenate.orm.entity.Instructor;
+
+import java.util.List;
 
 public interface Dao {
 
@@ -15,5 +18,6 @@ public interface Dao {
 
     void deleteInstructorDetailById(int theId);
 
+    List<Course> findCoursesByInstructorId(int theId);
 
 }
