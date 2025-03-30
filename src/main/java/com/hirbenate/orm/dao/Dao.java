@@ -3,6 +3,7 @@ package com.hirbenate.orm.dao;
 import com.hirbenate.orm.entity.Course;
 import com.hirbenate.orm.entity.InstructorDetail;
 import com.hirbenate.orm.entity.Instructor;
+import com.hirbenate.orm.entity.Student;
 
 import java.util.List;
 
@@ -35,5 +36,8 @@ public interface Dao {
 
     Course findCourseAndReviewsByCourseId(int theId);
 
+    Course findCourseAndStudentsByCourseId(int theId);
+
+    Student findStudentById(int id);
 
 }

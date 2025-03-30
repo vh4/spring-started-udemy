@@ -9,12 +9,22 @@ import java.util.List;
 @Table(name="course")
 public class Course {
 
+    // define our fields
+
+    // define constructors
+
+    // define getter setters
+
+    // define toString
+
+    // annotate fields
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name="id")
+    private int id;
 
-    @Column(name = "title")
+    @Column(name="title")
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
@@ -22,11 +32,22 @@ public class Course {
     @JoinColumn(name="instructor_id")
     private Instructor instructor;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private List<Review> reviews;
 
-    public Course(){
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "course_student",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> students;
+
+    public Course() {
 
     }
 
@@ -34,11 +55,11 @@ public class Course {
         this.title = title;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -66,6 +87,8 @@ public class Course {
         this.reviews = reviews;
     }
 
+    // add a convenience method
+
     public void addReview(Review theReview) {
 
         if (reviews == null) {
@@ -73,6 +96,25 @@ public class Course {
         }
 
         reviews.add(theReview);
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    // add a convenience method
+
+    public void addStudent(Student theStudent) {
+
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+
+        students.add(theStudent);
     }
 
     @Override

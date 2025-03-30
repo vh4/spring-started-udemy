@@ -3,6 +3,7 @@ package com.hirbenate.orm.dao;
 import com.hirbenate.orm.entity.Course;
 import com.hirbenate.orm.entity.Instructor;
 import com.hirbenate.orm.entity.InstructorDetail;
+import com.hirbenate.orm.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -132,6 +133,21 @@ public class DaoImp  implements Dao{
 
         // execute query
         return query.getSingleResult();
+    }
+
+    public Course findCourseAndStudentsByCourseId(int id){
+        TypedQuery<Course> query = db.createQuery(
+                "select c from Course c join fetch c.students where c.id = :id", Course.class
+        );
+
+        query.setParameter("id", id);
+        return query.getSingleResult();
+
+    }
+
+    @Override
+    public Student findStudentById(int id){
+        return db.find(Student.class, id);
     }
 
 }

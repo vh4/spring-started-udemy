@@ -1,14 +1,12 @@
 package com.hirbenate.orm;
 
 import com.hirbenate.orm.dao.Dao;
-import com.hirbenate.orm.entity.Course;
-import com.hirbenate.orm.entity.Instructor;
-import com.hirbenate.orm.entity.InstructorDetail;
-import com.hirbenate.orm.entity.Review;
+import com.hirbenate.orm.entity.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.config.ScheduledTasksBeanDefinitionParser;
 
 import java.util.List;
 
@@ -53,10 +51,66 @@ public class OrmApplication {
 
 //			createCourseAndReviews(dao);
 
-			retrieveCourseAndReviews(dao);
+//			retrieveCourseAndReviews(dao);
+
+			createCourseAndStudents(dao);
+
+//			findCourseAndStudents(dao);
 
 		};
 	}
+	private void findCourseAndStudents(Dao dao) {
+
+		int theId = 10;
+		Course tempCourse = dao.findCourseAndStudentsByCourseId(theId);
+
+		System.out.println("Loaded course: " + tempCourse);
+		System.out.println("Students: " + tempCourse.getStudents());
+
+		System.out.println("Done!");
+	}
+
+//	private void createCourseAndStudents(Dao dao) {
+//		int theId = 13;
+//		Course course = dao.findCourseById(theId);
+//
+//		if (course == null) {
+//			System.out.println("Course with ID " + theId + " not found.");
+//			return;
+//		}
+//
+//		Student tempStudent1 = new Student("john@luv2code.com", "Doe", "john");
+//		course.addStudent(tempStudent1);
+//
+//		System.out.println("Associated students: " + course.getStudents());
+//
+//		dao.update(course);
+//		System.out.println("Done!");
+//	}
+
+	private void createCourseAndStudents(Dao dao) {
+		int courseId = 13;
+		int studentId = 3;
+
+		Course course = dao.findCourseById(courseId);
+		Student student = dao.findStudentById(studentId);
+
+		if (course == null || student == null) {
+			System.out.println("Course or Student not found.");
+			return;
+		}
+
+		// Ensure Student#3 is not already in Course#13
+		if (!course.getStudents().contains(student)) {
+			course.addStudent(student);
+			dao.update(course); // Merge course instead of student
+			System.out.println("Student added successfully.");
+		} else {
+			System.out.println("Student is already enrolled in this course.");
+		}
+	}
+
+
 
 	private void deleteCourseAndReviews(Dao dao) {
 
